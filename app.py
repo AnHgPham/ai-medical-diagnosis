@@ -163,43 +163,46 @@ st.markdown("""
     }
     
     /* Chat input - Enhanced styling */
-    [data-testid="stChatInput"] {
-        background: linear-gradient(to right, #f8f9fa, #ffffff);
-        padding: 1.5rem;
-        border-radius: 20px;
-        box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.15);
+    .stChatInput {
+        background: white;
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
         margin-top: 2rem;
     }
     
-    [data-testid="stChatInput"] > div {
-        border-radius: 30px !important;
+    .stChatInput textarea {
         border: 2px solid #667eea !important;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
-        background: white !important;
-    }
-    
-    [data-testid="stChatInput"] input {
-        font-size: 1.05rem !important;
-        padding: 1.2rem 1.5rem !important;
-        border: none !important;
-    }
-    
-    [data-testid="stChatInput"] input::placeholder {
-        color: #999 !important;
-        font-style: italic !important;
-    }
-    
-    [data-testid="stChatInput"] button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        border-radius: 50% !important;
-        width: 45px !important;
-        height: 45px !important;
+        border-radius: 25px !important;
+        padding: 1rem 1.5rem !important;
+        font-size: 1rem !important;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15) !important;
         transition: all 0.3s ease !important;
     }
     
-    [data-testid="stChatInput"] button:hover {
-        transform: scale(1.1) !important;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
+    .stChatInput textarea:focus {
+        border-color: #764ba2 !important;
+        box-shadow: 0 4px 12px rgba(118, 75, 162, 0.25) !important;
+        outline: none !important;
+    }
+    
+    .stChatInput button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 48px !important;
+        height: 48px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+    }
+    
+    .stChatInput button:hover {
+        transform: scale(1.08) !important;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5) !important;
+    }
+    
+    .stChatInput button svg {
+        fill: white !important;
     }
     
     /* Footer */
@@ -260,14 +263,32 @@ def init_gemini():
         st.stop()
     
     genai.configure(api_key=api_key)
-    # Try different model names that work with the API
+    
+    # Try to list available models and use the first generative model
     try:
-        return genai.GenerativeModel('gemini-1.5-pro-latest')
+        models = genai.list_models()
+        for model in models:
+            if 'generateContent' in model.supported_generation_methods:
+                return genai.GenerativeModel(model.name)
     except:
+        pass
+    
+    # Fallback to common model names
+    model_names = [
+        'gemini-pro',
+        'models/gemini-pro',
+        'gemini-1.0-pro',
+        'models/gemini-1.0-pro'
+    ]
+    
+    for model_name in model_names:
         try:
-            return genai.GenerativeModel('gemini-1.5-pro')
+            return genai.GenerativeModel(model_name)
         except:
-            return genai.GenerativeModel('gemini-pro')
+            continue
+    
+    st.error("❌ Cannot initialize Gemini model. Please check your API key.")
+    st.stop()
 
 # Initialize session state - Load knowledge base first
 if 'kb' not in st.session_state:
