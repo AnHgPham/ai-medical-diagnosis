@@ -251,18 +251,19 @@ def init_gemini():
     # Use gemini-1.5-flash instead of deprecated gemini-pro
     return genai.GenerativeModel('gemini-1.5-flash')
 
-# Initialize session state
-if 'messages' not in st.session_state:
-    st.session_state.messages = []
-    st.session_state.chat_history = []
+# Initialize session state - Load knowledge base first
+if 'kb' not in st.session_state:
+    st.session_state.kb = load_knowledge_base()
 
 if 'knowledge_context' not in st.session_state:
-    kb = load_knowledge_base()
-    st.session_state.knowledge_context = build_knowledge_context(kb)
-    st.session_state.kb = kb
+    st.session_state.knowledge_context = build_knowledge_context(st.session_state.kb)
 
 if 'model' not in st.session_state:
     st.session_state.model = init_gemini()
+
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
+    st.session_state.chat_history = []
 
 # Header
 st.markdown("""
@@ -284,25 +285,23 @@ st.markdown("""
 with st.sidebar:
     st.markdown("### 📊 Thống kê hệ thống")
     
-    # Ensure kb is loaded
-    if 'kb' in st.session_state:
-        # Stats cards
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown(f"""
-            <div class="stats-card">
-                <h2>{len(st.session_state.kb['diseases'])}</h2>
-                <p>Bệnh phổ biến</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown(f"""
-            <div class="stats-card">
-                <h2>{len(st.session_state.kb['symptoms'])}</h2>
-                <p>Triệu chứng</p>
-            </div>
-            """, unsafe_allow_html=True)
+    # Stats cards - kb is guaranteed to be loaded
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown(f"""
+        <div class="stats-card">
+            <h2>{len(st.session_state.kb['diseases'])}</h2>
+            <p>Bệnh phổ biến</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+        <div class="stats-card">
+            <h2>{len(st.session_state.kb['symptoms'])}</h2>
+            <p>Triệu chứng</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("---")
     
