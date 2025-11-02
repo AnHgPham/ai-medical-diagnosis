@@ -178,11 +178,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Warning
-    st.markdown(f"""
-    <div class="warning-container">
-        {WARNING_MESSAGE}
-    </div>
-    """, unsafe_allow_html=True)
+    st.warning(WARNING_MESSAGE)
     
     # Sidebar
     with st.sidebar:
