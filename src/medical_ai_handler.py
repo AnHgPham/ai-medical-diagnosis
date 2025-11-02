@@ -45,18 +45,26 @@ class MedicalAIHandler:
             # Configure Gemini
             genai.configure(api_key=api_key)
             
-            # Create model with system instruction
+            # Create model
             self.model = genai.GenerativeModel(
                 model_name=self.model_name,
                 generation_config={
                     "temperature": self.temperature,
                     "max_output_tokens": self.max_tokens,
-                },
-                system_instruction=SYSTEM_PROMPT
+                }
             )
             
-            # Start chat session
-            self.chat_session = self.model.start_chat(history=[])
+            # Start chat session with system prompt as first message
+            self.chat_session = self.model.start_chat(history=[
+                {
+                    'role': 'user',
+                    'parts': [SYSTEM_PROMPT]
+                },
+                {
+                    'role': 'model',
+                    'parts': ['Tôi hiểu rồi. Tôi là AI Doctor và sẽ tuân thủ tất cả các quy tắc và hướng dẫn bạn đã đưa ra. Tôi sẵn sàng giúp đỡ người dùng với các vấn đề y tế của họ một cách chuyên nghiệp và an toàn.']
+                }
+            ])
             
             logger.info(f"Initialized Medical AI: {self.model_name}")
             
@@ -118,7 +126,17 @@ Bạn đã đề cập đến triệu chứng **"{keyword}"** - đây có thể 
     def reset_conversation(self) -> None:
         """Reset chat session for new conversation"""
         try:
-            self.chat_session = self.model.start_chat(history=[])
+            # Reset with system prompt
+            self.chat_session = self.model.start_chat(history=[
+                {
+                    'role': 'user',
+                    'parts': [SYSTEM_PROMPT]
+                },
+                {
+                    'role': 'model',
+                    'parts': ['Tôi hiểu rồi. Tôi là AI Doctor và sẵn sàng giúp đỡ bạn.']
+                }
+            ])
             logger.info("Chat session reset")
         except Exception as e:
             logger.error(f"Error resetting conversation: {e}")
