@@ -19,7 +19,7 @@ for dir_path in [DISEASES_DIR, SYMPTOMS_DIR, LOGS_DIR, REPORTS_DIR]:
     dir_path.mkdir(parents=True, exist_ok=True)
 
 # LLM Configuration
-LLM_MODEL = "gemini-1.5-flash"
+LLM_MODEL = "gemini-2.0-flash"
 LLM_TEMPERATURE = 0.7
 LLM_MAX_TOKENS = 2048
 
