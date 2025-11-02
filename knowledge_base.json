@@ -1,0 +1,142 @@
+{
+  "diseases": [
+    {
+      "id": "flu",
+      "name": "Cúm (Influenza)",
+      "description": "Bệnh cúm là một bệnh truyền nhiễm đường hô hấp cấp tính do virus cúm gây ra.",
+      "symptoms": ["fever", "cough", "sore_throat", "fatigue", "muscle_pain", "headache", "runny_nose"],
+      "probability_weights": {
+        "fever": 0.9,
+        "cough": 0.8,
+        "sore_throat": 0.7,
+        "fatigue": 0.85,
+        "muscle_pain": 0.8,
+        "headache": 0.75,
+        "runny_nose": 0.6
+      },
+      "treatment": "Nghỉ ngơi, uống nhiều nước, dùng thuốc hạ sốt, thuốc kháng virus nếu cần.",
+      "severity": "medium"
+    },
+    {
+      "id": "common_cold",
+      "name": "Cảm lạnh thông thường",
+      "description": "Nhiễm trùng đường hô hấp trên nhẹ do virus gây ra.",
+      "symptoms": ["runny_nose", "sneezing", "sore_throat", "cough", "mild_fever", "headache"],
+      "probability_weights": {
+        "runny_nose": 0.95,
+        "sneezing": 0.9,
+        "sore_throat": 0.75,
+        "cough": 0.7,
+        "mild_fever": 0.4,
+        "headache": 0.5
+      },
+      "treatment": "Nghỉ ngơi, uống nhiều nước, thuốc giảm triệu chứng.",
+      "severity": "low"
+    },
+    {
+      "id": "covid19",
+      "name": "COVID-19",
+      "description": "Bệnh do virus SARS-CoV-2 gây ra, có thể gây viêm phổi nghiêm trọng.",
+      "symptoms": ["fever", "cough", "fatigue", "loss_of_taste", "loss_of_smell", "shortness_of_breath", "muscle_pain"],
+      "probability_weights": {
+        "fever": 0.85,
+        "cough": 0.8,
+        "fatigue": 0.9,
+        "loss_of_taste": 0.7,
+        "loss_of_smell": 0.7,
+        "shortness_of_breath": 0.6,
+        "muscle_pain": 0.65
+      },
+      "treatment": "Cách ly, theo dõi, điều trị triệu chứng, có thể cần nhập viện nếu nặng.",
+      "severity": "high"
+    },
+    {
+      "id": "allergic_rhinitis",
+      "name": "Viêm mũi dị ứng",
+      "description": "Phản ứng dị ứng của niêm mạc mũi với các chất gây dị ứng.",
+      "symptoms": ["sneezing", "runny_nose", "itchy_eyes", "nasal_congestion"],
+      "probability_weights": {
+        "sneezing": 0.95,
+        "runny_nose": 0.9,
+        "itchy_eyes": 0.85,
+        "nasal_congestion": 0.8
+      },
+      "treatment": "Tránh chất gây dị ứng, thuốc kháng histamine, xịt mũi corticosteroid.",
+      "severity": "low"
+    },
+    {
+      "id": "bronchitis",
+      "name": "Viêm phế quản",
+      "description": "Viêm niêm mạc phế quản, thường do nhiễm trùng virus hoặc vi khuẩn.",
+      "symptoms": ["cough", "phlegm", "chest_discomfort", "fatigue", "mild_fever", "shortness_of_breath"],
+      "probability_weights": {
+        "cough": 0.95,
+        "phlegm": 0.9,
+        "chest_discomfort": 0.75,
+        "fatigue": 0.7,
+        "mild_fever": 0.5,
+        "shortness_of_breath": 0.6
+      },
+      "treatment": "Nghỉ ngơi, uống nhiều nước, thuốc long đờm, có thể cần kháng sinh.",
+      "severity": "medium"
+    }
+  ],
+  "symptoms": [
+    {"id": "fever", "name": "Sốt cao (>38°C)", "category": "general"},
+    {"id": "mild_fever", "name": "Sốt nhẹ (37-38°C)", "category": "general"},
+    {"id": "cough", "name": "Ho", "category": "respiratory"},
+    {"id": "sore_throat", "name": "Đau họng", "category": "respiratory"},
+    {"id": "runny_nose", "name": "Sổ mũi", "category": "respiratory"},
+    {"id": "nasal_congestion", "name": "Nghẹt mũi", "category": "respiratory"},
+    {"id": "sneezing", "name": "Hắt hơi", "category": "respiratory"},
+    {"id": "shortness_of_breath", "name": "Khó thở", "category": "respiratory"},
+    {"id": "phlegm", "name": "Có đờm", "category": "respiratory"},
+    {"id": "chest_discomfort", "name": "Khó chịu vùng ngực", "category": "respiratory"},
+    {"id": "fatigue", "name": "Mệt mỏi", "category": "general"},
+    {"id": "muscle_pain", "name": "Đau cơ", "category": "general"},
+    {"id": "headache", "name": "Đau đầu", "category": "general"},
+    {"id": "loss_of_taste", "name": "Mất vị giác", "category": "sensory"},
+    {"id": "loss_of_smell", "name": "Mất khứu giác", "category": "sensory"},
+    {"id": "itchy_eyes", "name": "Ngứa mắt", "category": "sensory"}
+  ],
+  "rules": [
+    {
+      "id": "rule_1",
+      "description": "Nếu có sốt cao + ho + đau cơ → Khả năng cao là cúm",
+      "conditions": ["fever", "cough", "muscle_pain"],
+      "conclusion": "flu",
+      "confidence": 0.85
+    },
+    {
+      "id": "rule_2",
+      "description": "Nếu có sổ mũi + hắt hơi + không sốt → Có thể là cảm lạnh",
+      "conditions": ["runny_nose", "sneezing"],
+      "exclude_conditions": ["fever"],
+      "conclusion": "common_cold",
+      "confidence": 0.8
+    },
+    {
+      "id": "rule_3",
+      "description": "Nếu có mất vị giác hoặc mất khứu giác → Nghi ngờ COVID-19",
+      "conditions": ["loss_of_taste"],
+      "or_conditions": ["loss_of_smell"],
+      "conclusion": "covid19",
+      "confidence": 0.9
+    },
+    {
+      "id": "rule_4",
+      "description": "Nếu có hắt hơi + ngứa mắt + không sốt → Có thể là dị ứng",
+      "conditions": ["sneezing", "itchy_eyes"],
+      "exclude_conditions": ["fever", "cough"],
+      "conclusion": "allergic_rhinitis",
+      "confidence": 0.85
+    },
+    {
+      "id": "rule_5",
+      "description": "Nếu ho kéo dài + có đờm → Có thể là viêm phế quản",
+      "conditions": ["cough", "phlegm"],
+      "conclusion": "bronchitis",
+      "confidence": 0.75
+    }
+  ]
+}
