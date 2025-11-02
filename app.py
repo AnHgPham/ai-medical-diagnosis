@@ -255,7 +255,7 @@ def build_knowledge_context(kb):
     
     return "\n".join(context_parts)
 
-# Initialize Gemini with updated model
+# Initialize Gemini with stable model
 def init_gemini():
     api_key = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY"))
     if not api_key:
@@ -264,31 +264,13 @@ def init_gemini():
     
     genai.configure(api_key=api_key)
     
-    # Try to list available models and use the first generative model
+    # Use stable gemini-pro model directly
     try:
-        models = genai.list_models()
-        for model in models:
-            if 'generateContent' in model.supported_generation_methods:
-                return genai.GenerativeModel(model.name)
-    except:
-        pass
-    
-    # Fallback to common model names
-    model_names = [
-        'gemini-pro',
-        'models/gemini-pro',
-        'gemini-1.0-pro',
-        'models/gemini-1.0-pro'
-    ]
-    
-    for model_name in model_names:
-        try:
-            return genai.GenerativeModel(model_name)
-        except:
-            continue
-    
-    st.error("❌ Cannot initialize Gemini model. Please check your API key.")
-    st.stop()
+        return genai.GenerativeModel('gemini-pro')
+    except Exception as e:
+        st.error(f"❌ Cannot initialize Gemini model: {str(e)}")
+        st.error("💡 Please check your API key at https://makersuite.google.com/app/apikey")
+        st.stop()
 
 # Initialize session state - Load knowledge base first
 if 'kb' not in st.session_state:
