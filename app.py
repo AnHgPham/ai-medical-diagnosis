@@ -261,23 +261,25 @@ st.markdown("""
 with st.sidebar:
     st.markdown("### 📊 Thống kê hệ thống")
     
-    # Stats cards
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(f"""
-        <div class="stats-card">
-            <h2>{len(st.session_state.kb['diseases'])}</h2>
-            <p>Bệnh phổ biến</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown(f"""
-        <div class="stats-card">
-            <h2>{len(st.session_state.kb['symptoms'])}</h2>
-            <p>Triệu chứng</p>
-        </div>
-        """, unsafe_allow_html=True)
+    # Ensure kb is loaded
+    if 'kb' in st.session_state:
+        # Stats cards
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"""
+            <div class="stats-card">
+                <h2>{len(st.session_state.kb['diseases'])}</h2>
+                <p>Bệnh phổ biến</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="stats-card">
+                <h2>{len(st.session_state.kb['symptoms'])}</h2>
+                <p>Triệu chứng</p>
+            </div>
+            """, unsafe_allow_html=True)
     
     st.markdown("---")
     
