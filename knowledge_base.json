@@ -5,15 +5,6 @@
       "name": "Cúm (Influenza)",
       "description": "Bệnh cúm là một bệnh truyền nhiễm đường hô hấp cấp tính do virus cúm gây ra.",
       "symptoms": ["fever", "cough", "sore_throat", "fatigue", "muscle_pain", "headache", "runny_nose"],
-      "probability_weights": {
-        "fever": 0.9,
-        "cough": 0.8,
-        "sore_throat": 0.7,
-        "fatigue": 0.85,
-        "muscle_pain": 0.8,
-        "headache": 0.75,
-        "runny_nose": 0.6
-      },
       "treatment": "Nghỉ ngơi, uống nhiều nước, dùng thuốc hạ sốt, thuốc kháng virus nếu cần.",
       "severity": "medium"
     },
@@ -22,14 +13,6 @@
       "name": "Cảm lạnh thông thường",
       "description": "Nhiễm trùng đường hô hấp trên nhẹ do virus gây ra.",
       "symptoms": ["runny_nose", "sneezing", "sore_throat", "cough", "mild_fever", "headache"],
-      "probability_weights": {
-        "runny_nose": 0.95,
-        "sneezing": 0.9,
-        "sore_throat": 0.75,
-        "cough": 0.7,
-        "mild_fever": 0.4,
-        "headache": 0.5
-      },
       "treatment": "Nghỉ ngơi, uống nhiều nước, thuốc giảm triệu chứng.",
       "severity": "low"
     },
@@ -38,15 +21,6 @@
       "name": "COVID-19",
       "description": "Bệnh do virus SARS-CoV-2 gây ra, có thể gây viêm phổi nghiêm trọng.",
       "symptoms": ["fever", "cough", "fatigue", "loss_of_taste", "loss_of_smell", "shortness_of_breath", "muscle_pain"],
-      "probability_weights": {
-        "fever": 0.85,
-        "cough": 0.8,
-        "fatigue": 0.9,
-        "loss_of_taste": 0.7,
-        "loss_of_smell": 0.7,
-        "shortness_of_breath": 0.6,
-        "muscle_pain": 0.65
-      },
       "treatment": "Cách ly, theo dõi, điều trị triệu chứng, có thể cần nhập viện nếu nặng.",
       "severity": "high"
     },
@@ -55,12 +29,6 @@
       "name": "Viêm mũi dị ứng",
       "description": "Phản ứng dị ứng của niêm mạc mũi với các chất gây dị ứng.",
       "symptoms": ["sneezing", "runny_nose", "itchy_eyes", "nasal_congestion"],
-      "probability_weights": {
-        "sneezing": 0.95,
-        "runny_nose": 0.9,
-        "itchy_eyes": 0.85,
-        "nasal_congestion": 0.8
-      },
       "treatment": "Tránh chất gây dị ứng, thuốc kháng histamine, xịt mũi corticosteroid.",
       "severity": "low"
     },
@@ -69,74 +37,240 @@
       "name": "Viêm phế quản",
       "description": "Viêm niêm mạc phế quản, thường do nhiễm trùng virus hoặc vi khuẩn.",
       "symptoms": ["cough", "phlegm", "chest_discomfort", "fatigue", "mild_fever", "shortness_of_breath"],
-      "probability_weights": {
-        "cough": 0.95,
-        "phlegm": 0.9,
-        "chest_discomfort": 0.75,
-        "fatigue": 0.7,
-        "mild_fever": 0.5,
-        "shortness_of_breath": 0.6
-      },
       "treatment": "Nghỉ ngơi, uống nhiều nước, thuốc long đờm, có thể cần kháng sinh.",
+      "severity": "medium"
+    },
+    {
+      "id": "pneumonia",
+      "name": "Viêm phổi",
+      "description": "Nhiễm trùng phổi do vi khuẩn, virus hoặc nấm gây ra.",
+      "symptoms": ["fever", "cough", "phlegm", "chest_pain", "shortness_of_breath", "fatigue", "chills"],
+      "treatment": "Kháng sinh, nghỉ ngơi, uống nhiều nước, có thể cần nhập viện.",
+      "severity": "high"
+    },
+    {
+      "id": "asthma",
+      "name": "Hen suyễn",
+      "description": "Bệnh mãn tính gây viêm và co thắt đường thở.",
+      "symptoms": ["shortness_of_breath", "wheezing", "chest_tightness", "cough"],
+      "treatment": "Thuốc giãn phế quản, thuốc chống viêm, tránh yếu tố kích thích.",
+      "severity": "medium"
+    },
+    {
+      "id": "sinusitis",
+      "name": "Viêm xoang",
+      "description": "Viêm niêm mạc xoang mũi do nhiễm trùng hoặc dị ứng.",
+      "symptoms": ["facial_pain", "nasal_congestion", "headache", "runny_nose", "fever", "cough"],
+      "treatment": "Kháng sinh nếu do vi khuẩn, thuốc giảm đau, xịt mũi.",
+      "severity": "medium"
+    },
+    {
+      "id": "gastritis",
+      "name": "Viêm dạ dày",
+      "description": "Viêm niêm mạc dạ dày gây đau và khó chịu.",
+      "symptoms": ["stomach_pain", "nausea", "vomiting", "bloating", "loss_of_appetite"],
+      "treatment": "Thuốc kháng acid, tránh thức ăn cay nóng, ăn nhẹ nhàng.",
+      "severity": "medium"
+    },
+    {
+      "id": "gastroenteritis",
+      "name": "Viêm dạ dày ruột",
+      "description": "Nhiễm trùng đường tiêu hóa gây tiêu chảy và nôn mửa.",
+      "symptoms": ["diarrhea", "nausea", "vomiting", "stomach_pain", "fever", "fatigue"],
+      "treatment": "Bù nước, điện giải, nghỉ ngơi, ăn nhẹ.",
+      "severity": "medium"
+    },
+    {
+      "id": "food_poisoning",
+      "name": "Ngộ độc thực phẩm",
+      "description": "Bệnh do ăn thực phẩm nhiễm khuẩn hoặc độc tố.",
+      "symptoms": ["nausea", "vomiting", "diarrhea", "stomach_pain", "fever", "weakness"],
+      "treatment": "Bù nước, nghỉ ngơi, có thể cần điều trị tại bệnh viện nếu nặng.",
+      "severity": "medium"
+    },
+    {
+      "id": "migraine",
+      "name": "Đau nửa đầu (Migraine)",
+      "description": "Cơn đau đầu dữ dội, thường một bên đầu.",
+      "symptoms": ["severe_headache", "nausea", "sensitivity_to_light", "sensitivity_to_sound", "visual_disturbances"],
+      "treatment": "Thuốc giảm đau, nghỉ ngơi trong phòng tối, tránh yếu tố kích thích.",
+      "severity": "medium"
+    },
+    {
+      "id": "tension_headache",
+      "name": "Đau đầu căng thẳng",
+      "description": "Đau đầu do căng thẳng cơ và stress.",
+      "symptoms": ["headache", "neck_pain", "fatigue", "difficulty_concentrating"],
+      "treatment": "Thuốc giảm đau, massage, giảm stress, nghỉ ngơi.",
+      "severity": "low"
+    },
+    {
+      "id": "hypertension",
+      "name": "Tăng huyết áp",
+      "description": "Huyết áp cao có thể gây biến chứng tim mạch.",
+      "symptoms": ["headache", "dizziness", "blurred_vision", "chest_pain", "shortness_of_breath"],
+      "treatment": "Thuốc hạ huyết áp, chế độ ăn ít muối, tập thể dục.",
+      "severity": "high"
+    },
+    {
+      "id": "diabetes",
+      "name": "Tiểu đường",
+      "description": "Bệnh rối loạn chuyển hóa đường trong máu.",
+      "symptoms": ["increased_thirst", "frequent_urination", "fatigue", "blurred_vision", "slow_healing_wounds"],
+      "treatment": "Kiểm soát đường huyết, chế độ ăn, thuốc hoặc insulin.",
+      "severity": "high"
+    },
+    {
+      "id": "urinary_tract_infection",
+      "name": "Nhiễm trùng đường tiết niệu",
+      "description": "Nhiễm khuẩn ở bàng quang, niệu đạo hoặc thận.",
+      "symptoms": ["painful_urination", "frequent_urination", "lower_abdominal_pain", "fever", "cloudy_urine"],
+      "treatment": "Kháng sinh, uống nhiều nước, nghỉ ngơi.",
+      "severity": "medium"
+    },
+    {
+      "id": "conjunctivitis",
+      "name": "Viêm kết mạc (Đau mắt đỏ)",
+      "description": "Viêm lớp màng bao phủ mắt và mi mắt.",
+      "symptoms": ["red_eyes", "itchy_eyes", "eye_discharge", "tearing", "sensitivity_to_light"],
+      "treatment": "Thuốc nhỏ mắt kháng sinh hoặc kháng virus, vệ sinh mắt.",
+      "severity": "low"
+    },
+    {
+      "id": "dermatitis",
+      "name": "Viêm da",
+      "description": "Tình trạng viêm da gây ngứa và phát ban.",
+      "symptoms": ["skin_rash", "itching", "redness", "dry_skin", "swelling"],
+      "treatment": "Kem bôi corticosteroid, thuốc kháng histamine, giữ ẩm da.",
+      "severity": "low"
+    },
+    {
+      "id": "eczema",
+      "name": "Chàm (Eczema)",
+      "description": "Bệnh da mãn tính gây ngứa và khô da.",
+      "symptoms": ["itching", "dry_skin", "skin_rash", "redness", "cracked_skin"],
+      "treatment": "Kem dưỡng ẩm, kem corticosteroid, tránh chất kích ứng.",
+      "severity": "low"
+    },
+    {
+      "id": "acne",
+      "name": "Mụn trứng cá",
+      "description": "Tình trạng da do tắc nghẽn lỗ chân lông.",
+      "symptoms": ["pimples", "blackheads", "whiteheads", "oily_skin", "skin_inflammation"],
+      "treatment": "Rửa mặt sạch, kem trị mụn, có thể cần thuốc kháng sinh.",
+      "severity": "low"
+    },
+    {
+      "id": "dengue_fever",
+      "name": "Sốt xuất huyết",
+      "description": "Bệnh truyền nhiễm do virus dengue qua muỗi.",
+      "symptoms": ["high_fever", "severe_headache", "muscle_pain", "joint_pain", "skin_rash", "bleeding"],
+      "treatment": "Nghỉ ngơi, uống nhiều nước, theo dõi sát, có thể cần nhập viện.",
+      "severity": "high"
+    },
+    {
+      "id": "malaria",
+      "name": "Sốt rét",
+      "description": "Bệnh nhiễm ký sinh trùng do muỗi truyền.",
+      "symptoms": ["fever", "chills", "sweating", "headache", "nausea", "vomiting", "muscle_pain"],
+      "treatment": "Thuốc chống sốt rét, nghỉ ngơi, theo dõi.",
+      "severity": "high"
+    },
+    {
+      "id": "tuberculosis",
+      "name": "Lao phổi",
+      "description": "Bệnh nhiễm trùng phổi do vi khuẩn lao.",
+      "symptoms": ["chronic_cough", "coughing_blood", "chest_pain", "fever", "night_sweats", "weight_loss"],
+      "treatment": "Kháng sinh đặc hiệu dài ngày, cách ly, dinh dưỡng tốt.",
+      "severity": "high"
+    },
+    {
+      "id": "anemia",
+      "name": "Thiếu máu",
+      "description": "Tình trạng thiếu hồng cầu hoặc hemoglobin trong máu.",
+      "symptoms": ["fatigue", "weakness", "pale_skin", "dizziness", "shortness_of_breath", "cold_hands_feet"],
+      "treatment": "Bổ sung sắt, vitamin, điều trị nguyên nhân gốc.",
+      "severity": "medium"
+    },
+    {
+      "id": "anxiety_disorder",
+      "name": "Rối loạn lo âu",
+      "description": "Tình trạng lo lắng quá mức ảnh hưởng đến cuộc sống.",
+      "symptoms": ["excessive_worry", "restlessness", "fatigue", "difficulty_concentrating", "muscle_tension", "sleep_problems"],
+      "treatment": "Tâm lý trị liệu, thuốc chống lo âu, kỹ thuật thư giãn.",
       "severity": "medium"
     }
   ],
   "symptoms": [
     {"id": "fever", "name": "Sốt cao (>38°C)", "category": "general"},
+    {"id": "high_fever", "name": "Sốt cao (>39°C)", "category": "general"},
     {"id": "mild_fever", "name": "Sốt nhẹ (37-38°C)", "category": "general"},
+    {"id": "chills", "name": "Ớn lạnh", "category": "general"},
     {"id": "cough", "name": "Ho", "category": "respiratory"},
+    {"id": "chronic_cough", "name": "Ho kéo dài", "category": "respiratory"},
+    {"id": "coughing_blood", "name": "Ho ra máu", "category": "respiratory"},
     {"id": "sore_throat", "name": "Đau họng", "category": "respiratory"},
     {"id": "runny_nose", "name": "Sổ mũi", "category": "respiratory"},
     {"id": "nasal_congestion", "name": "Nghẹt mũi", "category": "respiratory"},
     {"id": "sneezing", "name": "Hắt hơi", "category": "respiratory"},
     {"id": "shortness_of_breath", "name": "Khó thở", "category": "respiratory"},
+    {"id": "wheezing", "name": "Thở khò khè", "category": "respiratory"},
     {"id": "phlegm", "name": "Có đờm", "category": "respiratory"},
     {"id": "chest_discomfort", "name": "Khó chịu vùng ngực", "category": "respiratory"},
+    {"id": "chest_pain", "name": "Đau ngực", "category": "respiratory"},
+    {"id": "chest_tightness", "name": "Tức ngực", "category": "respiratory"},
     {"id": "fatigue", "name": "Mệt mỏi", "category": "general"},
+    {"id": "weakness", "name": "Yếu người", "category": "general"},
     {"id": "muscle_pain", "name": "Đau cơ", "category": "general"},
-    {"id": "headache", "name": "Đau đầu", "category": "general"},
+    {"id": "joint_pain", "name": "Đau khớp", "category": "general"},
+    {"id": "headache", "name": "Đau đầu", "category": "neurological"},
+    {"id": "severe_headache", "name": "Đau đầu dữ dội", "category": "neurological"},
+    {"id": "dizziness", "name": "Chóng mặt", "category": "neurological"},
     {"id": "loss_of_taste", "name": "Mất vị giác", "category": "sensory"},
     {"id": "loss_of_smell", "name": "Mất khứu giác", "category": "sensory"},
-    {"id": "itchy_eyes", "name": "Ngứa mắt", "category": "sensory"}
-  ],
-  "rules": [
-    {
-      "id": "rule_1",
-      "description": "Nếu có sốt cao + ho + đau cơ → Khả năng cao là cúm",
-      "conditions": ["fever", "cough", "muscle_pain"],
-      "conclusion": "flu",
-      "confidence": 0.85
-    },
-    {
-      "id": "rule_2",
-      "description": "Nếu có sổ mũi + hắt hơi + không sốt → Có thể là cảm lạnh",
-      "conditions": ["runny_nose", "sneezing"],
-      "exclude_conditions": ["fever"],
-      "conclusion": "common_cold",
-      "confidence": 0.8
-    },
-    {
-      "id": "rule_3",
-      "description": "Nếu có mất vị giác hoặc mất khứu giác → Nghi ngờ COVID-19",
-      "conditions": ["loss_of_taste"],
-      "or_conditions": ["loss_of_smell"],
-      "conclusion": "covid19",
-      "confidence": 0.9
-    },
-    {
-      "id": "rule_4",
-      "description": "Nếu có hắt hơi + ngứa mắt + không sốt → Có thể là dị ứng",
-      "conditions": ["sneezing", "itchy_eyes"],
-      "exclude_conditions": ["fever", "cough"],
-      "conclusion": "allergic_rhinitis",
-      "confidence": 0.85
-    },
-    {
-      "id": "rule_5",
-      "description": "Nếu ho kéo dài + có đờm → Có thể là viêm phế quản",
-      "conditions": ["cough", "phlegm"],
-      "conclusion": "bronchitis",
-      "confidence": 0.75
-    }
+    {"id": "itchy_eyes", "name": "Ngứa mắt", "category": "sensory"},
+    {"id": "red_eyes", "name": "Mắt đỏ", "category": "sensory"},
+    {"id": "eye_discharge", "name": "Ghèn mắt", "category": "sensory"},
+    {"id": "tearing", "name": "Chảy nước mắt", "category": "sensory"},
+    {"id": "blurred_vision", "name": "Mờ mắt", "category": "sensory"},
+    {"id": "visual_disturbances", "name": "Rối loạn thị giác", "category": "sensory"},
+    {"id": "sensitivity_to_light", "name": "Nhạy cảm với ánh sáng", "category": "sensory"},
+    {"id": "sensitivity_to_sound", "name": "Nhạy cảm với âm thanh", "category": "sensory"},
+    {"id": "nausea", "name": "Buồn nôn", "category": "digestive"},
+    {"id": "vomiting", "name": "Nôn mửa", "category": "digestive"},
+    {"id": "diarrhea", "name": "Tiêu chảy", "category": "digestive"},
+    {"id": "stomach_pain", "name": "Đau bụng", "category": "digestive"},
+    {"id": "lower_abdominal_pain", "name": "Đau bụng dưới", "category": "digestive"},
+    {"id": "bloating", "name": "Đầy hơi", "category": "digestive"},
+    {"id": "loss_of_appetite", "name": "Chán ăn", "category": "digestive"},
+    {"id": "facial_pain", "name": "Đau mặt", "category": "general"},
+    {"id": "neck_pain", "name": "Đau cổ", "category": "general"},
+    {"id": "skin_rash", "name": "Phát ban", "category": "dermatological"},
+    {"id": "itching", "name": "Ngứa", "category": "dermatological"},
+    {"id": "redness", "name": "Đỏ da", "category": "dermatological"},
+    {"id": "dry_skin", "name": "Da khô", "category": "dermatological"},
+    {"id": "oily_skin", "name": "Da nhờn", "category": "dermatological"},
+    {"id": "swelling", "name": "Sưng", "category": "dermatological"},
+    {"id": "pimples", "name": "Mụn", "category": "dermatological"},
+    {"id": "blackheads", "name": "Mụn đầu đen", "category": "dermatological"},
+    {"id": "whiteheads", "name": "Mụn đầu trắng", "category": "dermatological"},
+    {"id": "skin_inflammation", "name": "Viêm da", "category": "dermatological"},
+    {"id": "cracked_skin", "name": "Da nứt nẻ", "category": "dermatological"},
+    {"id": "pale_skin", "name": "Da nhợt nhạt", "category": "dermatological"},
+    {"id": "bleeding", "name": "Chảy máu", "category": "general"},
+    {"id": "sweating", "name": "Đổ mồ hôi", "category": "general"},
+    {"id": "night_sweats", "name": "Đổ mồ hôi đêm", "category": "general"},
+    {"id": "weight_loss", "name": "Sụt cân", "category": "general"},
+    {"id": "increased_thirst", "name": "Khát nước nhiều", "category": "general"},
+    {"id": "frequent_urination", "name": "Đi tiểu nhiều", "category": "urinary"},
+    {"id": "painful_urination", "name": "Đau khi đi tiểu", "category": "urinary"},
+    {"id": "cloudy_urine", "name": "Nước tiểu đục", "category": "urinary"},
+    {"id": "slow_healing_wounds", "name": "Vết thương lâu lành", "category": "general"},
+    {"id": "cold_hands_feet", "name": "Tay chân lạnh", "category": "general"},
+    {"id": "difficulty_concentrating", "name": "Khó tập trung", "category": "neurological"},
+    {"id": "sleep_problems", "name": "Rối loạn giấc ngủ", "category": "neurological"},
+    {"id": "restlessness", "name": "Bồn chồn", "category": "neurological"},
+    {"id": "excessive_worry", "name": "Lo lắng quá mức", "category": "neurological"},
+    {"id": "muscle_tension", "name": "Căng cơ", "category": "general"}
   ]
 }
