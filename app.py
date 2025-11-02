@@ -1,10 +1,11 @@
 """
 AI Medical Diagnosis System - Streamlit Application
-Main UI application using modular architecture
+AI-Direct Approach (No JSON Knowledge Base)
 """
 import streamlit as st
 import sys
 from pathlib import Path
+from datetime import datetime
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
@@ -12,13 +13,10 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from config import (
     APP_TITLE,
     APP_ICON,
-    SIDEBAR_TITLE,
     WARNING_MESSAGE
 )
-from knowledge_manager import KnowledgeManager
-from medical_llm_handler import MedicalLLMHandler
-from diagnosis_engine import DiagnosisEngine
-from utils import SessionManager, setup_logging, sanitize_user_input, format_timestamp
+from medical_ai_handler import MedicalAIHandler
+from utils import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -31,143 +29,264 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# Custom CSS - Modern and Clean
 st.markdown("""
 <style>
-    /* Main header */
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    
+    /* Global Styles */
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Main container */
+    .main {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    /* Header */
     .main-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
-        border-radius: 10px;
+        padding: 2.5rem;
+        border-radius: 20px;
         text-align: center;
         color: white;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     }
     
     .main-header h1 {
-        font-size: 2.5rem;
-        font-weight: bold;
+        font-size: 3rem;
+        font-weight: 700;
         margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
     
     .main-header p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-    }
-    
-    /* Stats cards */
-    .stats-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1.5rem;
-        border-radius: 10px;
-        text-align: center;
-        color: white;
-        margin-bottom: 1rem;
-    }
-    
-    .stats-card h2 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0;
-    }
-    
-    .stats-card p {
-        font-size: 1rem;
-        margin: 0.5rem 0 0 0;
-        opacity: 0.9;
+        font-size: 1.2rem;
+        opacity: 0.95;
+        font-weight: 300;
     }
     
     /* Warning box */
     .warning-box {
-        background-color: #fff3cd;
-        border-left: 4px solid #ffc107;
-        padding: 1rem;
-        border-radius: 5px;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+        border-left: 5px solid #ff9800;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+    }
+    
+    .warning-box strong {
+        color: #e65100;
+        font-size: 1.1rem;
+    }
+    
+    /* Chat container */
+    .chat-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         margin: 1rem 0;
+        min-height: 400px;
     }
     
     /* Chat messages */
     .user-message {
-        background-color: #e3f2fd;
-        padding: 1rem;
-        border-radius: 10px;
-        margin: 0.5rem 0;
-        border-left: 4px solid #2196f3;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        padding: 1.2rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        border-left: 5px solid #2196f3;
+        box-shadow: 0 3px 10px rgba(33, 150, 243, 0.2);
+        animation: slideInRight 0.3s ease-out;
     }
     
     .ai-message {
-        background: linear-gradient(to right, #f8f9fa, #e9ecef);
-        padding: 1rem;
-        border-radius: 10px;
-        margin: 0.5rem 0;
-        border-left: 4px solid #667eea;
+        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        padding: 1.2rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        border-left: 5px solid #9c27b0;
+        box-shadow: 0 3px 10px rgba(156, 39, 176, 0.2);
+        animation: slideInLeft 0.3s ease-out;
     }
     
-    /* Info card */
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    /* Sidebar */
+    .sidebar .sidebar-content {
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Info cards */
     .info-card {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 0.5rem 0;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
     }
     
-    /* Button styling */
+    .info-card h4 {
+        color: #667eea;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .info-card ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .info-card li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .info-card li:last-child {
+        border-bottom: none;
+    }
+    
+    /* Feature badge */
+    .feature-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0.3rem;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Buttons */
     .stButton>button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        padding: 0.5rem 2rem;
+        padding: 0.8rem 2rem;
         border-radius: 25px;
-        font-weight: bold;
+        font-weight: 600;
+        font-size: 1rem;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* Chat input */
+    .stChatInput {
+        border-radius: 25px;
+        border: 2px solid #667eea;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 3rem;
+    }
+    
+    .footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .footer a:hover {
+        text-decoration: underline;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
-@st.cache_resource
-def initialize_system():
-    """Initialize system components"""
-    try:
-        logger.info("Initializing system components")
-        
-        # Initialize knowledge manager
-        knowledge_manager = KnowledgeManager()
-        
-        # Initialize LLM handler
-        llm_handler = MedicalLLMHandler()
-        
-        # Initialize diagnosis engine
-        diagnosis_engine = DiagnosisEngine(knowledge_manager, llm_handler)
-        
-        logger.info("System initialized successfully")
-        return knowledge_manager, llm_handler, diagnosis_engine
-        
-    except Exception as e:
-        logger.error(f"Failed to initialize system: {e}")
-        st.error(f"❌ Lỗi khởi tạo hệ thống: {str(e)}")
-        st.stop()
+def initialize_session_state():
+    """Initialize session state variables"""
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
+    
+    if 'ai_handler' not in st.session_state:
+        try:
+            st.session_state.ai_handler = MedicalAIHandler()
+            logger.info("AI Handler initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize AI Handler: {e}")
+            st.error(f"❌ Lỗi khởi tạo AI: {str(e)}")
+            st.stop()
+
+
+def display_greeting():
+    """Display initial greeting message"""
+    greeting = """
+👋 **Xin chào! Tôi là AI Doctor - Trợ lý Y tế Thông minh**
+
+Tôi được trang bị kiến thức y khoa toàn diện và có thể giúp bạn:
+
+🔍 **Phân tích triệu chứng** - Hiểu rõ các dấu hiệu bệnh lý  
+💊 **Chẩn đoán sơ bộ** - Đưa ra các khả năng bệnh với độ tin cậy  
+💡 **Khuyến nghị điều trị** - Hướng dẫn chăm sóc và điều trị phù hợp  
+⚠️ **Cảnh báo nguy hiểm** - Nhận biết triệu chứng cần cấp cứu ngay  
+
+---
+
+**Hãy mô tả triệu chứng của bạn, tôi sẽ đặt câu hỏi để hiểu rõ hơn!**
+
+_Ví dụ: "Tôi bị sốt 39 độ từ 2 ngày nay, ho nhiều và đau đầu"_
+
+---
+
+⚠️ **Lưu ý**: Đây chỉ là tham khảo, luôn tham khảo bác sĩ chuyên khoa khi cần!
+"""
+    
+    st.markdown(f"""
+    <div class="ai-message">
+        {greeting}
+    </div>
+    """, unsafe_allow_html=True)
 
 
 def main():
     """Main application"""
     
-    # Initialize system
-    knowledge_manager, llm_handler, diagnosis_engine = initialize_system()
-    
     # Initialize session state
-    SessionManager.initialize_session(st.session_state)
+    initialize_session_state()
     
     # Header
     st.markdown(f"""
     <div class="main-header">
-        <h1>{APP_ICON} AI Medical Diagnosis System</h1>
-        <p>Hệ thống chẩn đoán y tế thông minh được hỗ trợ bởi Google Gemini AI</p>
+        <h1>🏥 AI Medical Diagnosis</h1>
+        <p>Hệ thống Chẩn đoán Y tế Thông minh | Powered by Google Gemini AI</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -180,150 +299,132 @@ def main():
     
     # Sidebar
     with st.sidebar:
-        st.markdown(f"### {SIDEBAR_TITLE}")
+        st.markdown("### 🎯 Tính năng AI Doctor")
         
-        # Get statistics
-        stats = knowledge_manager.get_statistics()
-        
-        # Stats cards
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown(f"""
-            <div class="stats-card">
-                <h2>{stats['total_diseases']}</h2>
-                <p>Bệnh phổ biến</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown(f"""
-            <div class="stats-card">
-                <h2>{stats['total_symptoms']}</h2>
-                <p>Triệu chứng</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        st.markdown("---")
-        
-        # Info card
         st.markdown("""
         <div class="info-card">
-            <h4>🎯 Tính năng</h4>
+            <h4>💡 Khả năng của AI</h4>
             <ul>
-                <li>💬 Chat với AI Doctor</li>
-                <li>🧠 Phân tích thông minh</li>
-                <li>📊 Chẩn đoán chi tiết</li>
-                <li>💊 Khuyến nghị điều trị</li>
-                <li>⚠️ Cảnh báo nguy hiểm</li>
+                <li>🌍 <b>Kiến thức toàn diện</b> - Hàng ngàn bệnh lý</li>
+                <li>🔍 <b>Phân tích thông minh</b> - Đặt câu hỏi chi tiết</li>
+                <li>💊 <b>Chẩn đoán chính xác</b> - Dựa trên triệu chứng</li>
+                <li>⚠️ <b>Cảnh báo kịp thời</b> - Nhận biết nguy hiểm</li>
+                <li>💬 <b>Tư vấn 24/7</b> - Luôn sẵn sàng hỗ trợ</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("---")
         
-        # System info
         st.markdown("""
         <div class="info-card">
             <h4>🔧 Công nghệ</h4>
             <ul>
-                <li><b>AI Model:</b> Google Gemini Pro</li>
+                <li><b>AI Model:</b> Google Gemini 2.0 Flash</li>
                 <li><b>Framework:</b> Streamlit</li>
+                <li><b>Approach:</b> AI-Direct Diagnosis</li>
                 <li><b>Language:</b> Python 3.11</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
+        st.markdown("---")
+        
         # Clear chat button
-        if st.button("🗑️ Xóa lịch sử chat"):
+        if st.button("🗑️ Xóa lịch sử chat", use_container_width=True):
             st.session_state.messages = []
-            st.session_state.chat_history = []
-            st.session_state.user_symptoms = []
+            st.session_state.ai_handler.reset_conversation()
             st.rerun()
+        
+        st.markdown("---")
+        
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem;">
+            <p style="font-size: 0.9rem; color: #666;">
+                Made with ❤️ by AnHgPham<br>
+                <a href="https://github.com/AnHgPham/ai-medical-diagnosis" target="_blank" style="color: #667eea;">
+                    View on GitHub
+                </a>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Main chat area
     st.markdown("### 💬 Chat với AI Doctor")
     
+    # Chat container
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    
     # Display greeting if no messages
     if not st.session_state.messages:
-        greeting = """
-        👋 **Xin chào! Tôi là AI Doctor, trợ lý y tế thông minh.**
-        
-        Tôi có thể giúp bạn:
-        - 🔍 Phân tích các triệu chứng bạn đang gặp phải
-        - 💡 Đưa ra chẩn đoán sơ bộ với độ tin cậy
-        - 💊 Khuyến nghị điều trị phù hợp
-        - ⚠️ Cảnh báo các dấu hiệu nguy hiểm cần đi khám ngay
-        
-        **Hãy mô tả các triệu chứng của bạn, tôi sẽ hỏi thêm nếu cần để hiểu rõ hơn!**
-        
-        _Ví dụ: "Tôi bị sốt cao, ho và đau đầu"_
-        """
-        st.markdown(f"""
-        <div class="ai-message">
-            {greeting}
-        </div>
-        """, unsafe_allow_html=True)
+        display_greeting()
     
     # Display chat history
     for message in st.session_state.messages:
         role = message['role']
         content = message['content']
+        timestamp = message.get('timestamp', '')
         
         if role == 'user':
             st.markdown(f"""
             <div class="user-message">
-                <b>👤 Bạn:</b><br>{content}
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <b>👤 Bạn</b>
+                    <span style="font-size: 0.8rem; color: #666;">{timestamp}</span>
+                </div>
+                <div>{content}</div>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class="ai-message">
-                <b>🏥 AI Doctor:</b><br>{content}
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <b>🏥 AI Doctor</b>
+                    <span style="font-size: 0.8rem; color: #666;">{timestamp}</span>
+                </div>
+                <div>{content}</div>
             </div>
             """, unsafe_allow_html=True)
     
+    st.markdown('</div>', unsafe_allow_html=True)
+    
     # Chat input
-    user_input = st.chat_input("Nhập triệu chứng của bạn... (Ví dụ: Tôi bị sốt cao, ho và đau đầu)")
+    user_input = st.chat_input("💬 Mô tả triệu chứng của bạn... (Ví dụ: Tôi bị sốt cao, ho và đau đầu)")
     
     if user_input:
-        # Sanitize input
-        user_input = sanitize_user_input(user_input)
+        # Get current timestamp
+        timestamp = datetime.now().strftime("%H:%M")
         
         # Add user message
-        SessionManager.add_message(st.session_state, 'user', user_input)
-        
-        # Get chat history
-        chat_history = SessionManager.get_chat_history_text(st.session_state)
+        st.session_state.messages.append({
+            'role': 'user',
+            'content': user_input,
+            'timestamp': timestamp
+        })
         
         # Show processing
-        with st.spinner("🔍 Đang phân tích triệu chứng..."):
+        with st.spinner("🔍 AI Doctor đang phân tích triệu chứng của bạn..."):
             try:
-                # Analyze symptoms
-                analysis_result = diagnosis_engine.analyze_symptoms(
-                    user_input=user_input,
-                    chat_history=chat_history,
-                    accumulated_symptoms=st.session_state.user_symptoms
-                )
-                
-                # Update accumulated symptoms
-                st.session_state.user_symptoms = analysis_result['symptoms']
-                
-                # Generate diagnosis
-                diagnosis_text = diagnosis_engine.generate_diagnosis(
-                    user_input=user_input,
-                    analysis_result=analysis_result,
-                    chat_history=chat_history
-                )
+                # Get AI diagnosis
+                ai_response = st.session_state.ai_handler.diagnose(user_input)
                 
                 # Add AI response
-                SessionManager.add_message(st.session_state, 'assistant', diagnosis_text)
+                st.session_state.messages.append({
+                    'role': 'assistant',
+                    'content': ai_response,
+                    'timestamp': timestamp
+                })
                 
                 logger.info("Successfully processed user input")
                 
             except Exception as e:
                 logger.error(f"Error processing user input: {e}")
                 error_message = f"❌ Lỗi: {str(e)}\n\n💡 Vui lòng thử lại sau."
-                SessionManager.add_message(st.session_state, 'assistant', error_message)
+                st.session_state.messages.append({
+                    'role': 'assistant',
+                    'content': error_message,
+                    'timestamp': timestamp
+                })
         
         # Rerun to show new messages
         st.rerun()
@@ -331,10 +432,11 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #666; padding: 1rem;">
+    <div class="footer">
         © 2025 AI Medical Diagnosis System | Powered by <b>Google Gemini AI</b><br>
         <a href="https://github.com/AnHgPham/ai-medical-diagnosis" target="_blank">GitHub</a> • 
-        <a href="https://streamlit.io" target="_blank">Streamlit</a>
+        <a href="https://streamlit.io" target="_blank">Streamlit</a> • 
+        <a href="https://ai.google.dev/" target="_blank">Google AI</a>
     </div>
     """, unsafe_allow_html=True)
 
