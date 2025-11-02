@@ -163,8 +163,31 @@ st.markdown("""
     }
     
     /* Chat input */
+    .stChatInput {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem 2rem;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    
     .stChatInput > div {
-        border-radius: 25px;
+        border-radius: 30px;
+        border: 2px solid #667eea;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+    
+    .stChatInput input {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+    
+    .stChatInput input::placeholder {
+        color: #999;
+        font-style: italic;
     }
     
     /* Footer */
@@ -357,8 +380,9 @@ if len(st.session_state.messages) == 0:
     </div>
     """, unsafe_allow_html=True)
 
-# Chat input
-user_input = st.chat_input("💬 Nhập triệu chứng của bạn...")
+# Chat input with improved UI
+st.markdown("<div style='margin-top: 2rem;'></div>", unsafe_allow_html=True)
+user_input = st.chat_input("💬 Nhập triệu chứng của bạn... (Ví dụ: Tôi bị sốt cao, ho và đau đầu)")
 
 if user_input:
     # Add user message
