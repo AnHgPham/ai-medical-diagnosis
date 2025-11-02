@@ -148,7 +148,7 @@ def display_message(role, content, timestamp=""):
                 <span>👤 Bạn</span>
                 <span class="msg-time">{timestamp}</span>
             </div>
-            <div>{content}</div>
+            <div>{content.replace('<', '&lt;').replace('>', '&gt;')}</div>
         </div>
         """, unsafe_allow_html=True)
     else:
@@ -158,7 +158,7 @@ def display_message(role, content, timestamp=""):
                 <span>🏥 AI Doctor</span>
                 <span class="msg-time">{timestamp}</span>
             </div>
-            <div>{content}</div>
+            <div>{content.replace('<', '&lt;').replace('>', '&gt;')}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -218,19 +218,7 @@ def main():
             st.success("✅ Đã xóa lịch sử chat!")
             st.rerun()
         
-        st.markdown("---")
-        
-        st.markdown("""
-        <div style="text-align: center; padding: 1rem 0;">
-            <p style="font-size: 0.9rem;">
-                Made with ❤️ by AnHgPham<br>
-                <a href="https://github.com/AnHgPham/ai-medical-diagnosis" 
-                   target="_blank" style="color: white; text-decoration: underline;">
-                    View on GitHub
-                </a>
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+
     
     # Main chat area
     st.markdown("## 💬 Chat với AI Doctor")
