@@ -162,32 +162,44 @@ st.markdown("""
         box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
     }
     
-    /* Chat input */
-    .stChatInput {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 1rem 2rem;
-        background: white;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
+    /* Chat input - Enhanced styling */
+    [data-testid="stChatInput"] {
+        background: linear-gradient(to right, #f8f9fa, #ffffff);
+        padding: 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.15);
+        margin-top: 2rem;
     }
     
-    .stChatInput > div {
-        border-radius: 30px;
-        border: 2px solid #667eea;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    [data-testid="stChatInput"] > div {
+        border-radius: 30px !important;
+        border: 2px solid #667eea !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+        background: white !important;
     }
     
-    .stChatInput input {
-        font-size: 1rem;
-        padding: 1rem;
+    [data-testid="stChatInput"] input {
+        font-size: 1.05rem !important;
+        padding: 1.2rem 1.5rem !important;
+        border: none !important;
     }
     
-    .stChatInput input::placeholder {
-        color: #999;
-        font-style: italic;
+    [data-testid="stChatInput"] input::placeholder {
+        color: #999 !important;
+        font-style: italic !important;
+    }
+    
+    [data-testid="stChatInput"] button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border-radius: 50% !important;
+        width: 45px !important;
+        height: 45px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stChatInput"] button:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
     }
     
     /* Footer */
@@ -248,8 +260,14 @@ def init_gemini():
         st.stop()
     
     genai.configure(api_key=api_key)
-    # Use gemini-1.5-flash instead of deprecated gemini-pro
-    return genai.GenerativeModel('gemini-1.5-flash')
+    # Try different model names that work with the API
+    try:
+        return genai.GenerativeModel('gemini-1.5-pro-latest')
+    except:
+        try:
+            return genai.GenerativeModel('gemini-1.5-pro')
+        except:
+            return genai.GenerativeModel('gemini-pro')
 
 # Initialize session state - Load knowledge base first
 if 'kb' not in st.session_state:
