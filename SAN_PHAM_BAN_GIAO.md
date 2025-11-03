@@ -33,17 +33,12 @@ ai-medical-diagnosis/
 │   └── utils.py                   # Utilities
 │
 ├── tests/                         # Testing suite
-│   ├── __init__.py
-│   ├── test_input_validation.py
-│   ├── test_medical_ai_handler.py
-│   ├── test_data_quality.py
-│   ├── test_integration.py
-│   └── README_TESTS.md
-│
-└── figma_mockups/                 # Design mockups
-    ├── desktop_1440x1024.png
-    ├── tablet_768x1024.png
-    └── mobile_375x812.png
+    ├── __init__.py
+    ├── test_input_validation.py
+    ├── test_medical_ai_handler.py
+    ├── test_data_quality.py
+    ├── test_integration.py
+    └── README_TESTS.md
 ```
 
 **Thống kê code:**
