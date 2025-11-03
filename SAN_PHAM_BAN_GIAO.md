@@ -16,8 +16,6 @@ Theo yêu cầu của đề tài, các sản phẩm sau đã được hoàn thà
 
 - **Branch:** main
 
-- **Latest Commit:** 6d0ced6
-
 **Cấu trúc code:**
 
 ```
